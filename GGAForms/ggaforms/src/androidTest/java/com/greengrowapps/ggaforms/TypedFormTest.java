@@ -33,11 +33,9 @@ public class TypedFormTest extends AndroidTestCase{
         subscribedField.setChecked(true);
         petName.setText("Perro");
 
-        MainObj obj = form.getObject();
-
-        assertEquals("Joselito", obj.getName());
-        assertTrue(obj.isSubscribed());
-        assertEquals( "Perro", obj.getNested().getPetName() );
+        assertEquals("Joselito", form.getObject().getName());
+        assertTrue(form.getObject().isSubscribed());
+        assertEquals( "Perro", form.getObject().getNested().getPetName() );
     }
 
     public void testFillsSetObject(){
@@ -123,9 +121,38 @@ public class TypedFormTest extends AndroidTestCase{
 
         nameField.setText("Joselito");
         subscribedField.setChecked(true);
-        petName.setText("Perro");
 
+        assertFalse(form.isValid());
+
+        petName.setText("Perro");
         assertTrue(form.isValid());
 
+    }
+
+    public void testAnnotatedValidatorNotBreaksGetObject(){
+
+        StringFormInput nameField = new StringFormInput();
+        BooleanFormInput subscribedField = new BooleanFormInput();
+
+        StringFormInput petName = new StringFormInput();
+
+
+        TypedForm<MainObj> form = GGAForm.start()
+                .appendField("name", nameField)
+                .appendField("subscribed", subscribedField)
+                .appendField("nested", GGASection.start()
+                                .appendField("petName", petName)
+                                .build()
+                )
+                .buildTyped(MainObj.class)
+                .addValidator(AnnotatedValidator.buildFor(MainObj.class));
+
+        nameField.setText("Joselito");
+        subscribedField.setChecked(true);
+        petName.setText("Perro");
+
+        assertEquals("Joselito", form.getObject().getName());
+        assertTrue(form.getObject().isSubscribed());
+        assertEquals( "Perro", form.getObject().getNested().getPetName() );
     }
 }

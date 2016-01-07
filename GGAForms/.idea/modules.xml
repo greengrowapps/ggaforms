@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/GGAForms.iml" filepath="$PROJECT_DIR$/GGAForms.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/ggaforms/ggaforms.iml" filepath="$PROJECT_DIR$/ggaforms/ggaforms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ggaformsui/ggaformsui.iml" filepath="$PROJECT_DIR$/ggaformsui/ggaformsui.iml" />
     </modules>
   </component>
 </project>

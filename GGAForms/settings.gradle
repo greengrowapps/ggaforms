@@ -1,1 +1,1 @@
-include ':app', ':ggaforms'
+include ':app', ':ggaforms', ':ggaformsui'

@@ -30,7 +30,7 @@ public class SimpleFormImpl implements SimpleForm {
         }
     }
 
-    protected boolean validate() {
+    protected boolean isValidApplyingValidators() {
         ValidationResult result = new ValidationResultImpl();
         for(SimpleFormValidator validator : validators){
             result = ( validator.validate(fields,result) );
@@ -77,7 +77,11 @@ public class SimpleFormImpl implements SimpleForm {
     }
 
     protected synchronized void onFieldChanged(String property, FormInput formInput) {
-        boolean newValid = validate();
+        validate();
+    }
+
+    protected void validate() {
+        boolean newValid = isValidApplyingValidators();
         if(valid!=newValid){
             valid=newValid;
             onValidityChanged();

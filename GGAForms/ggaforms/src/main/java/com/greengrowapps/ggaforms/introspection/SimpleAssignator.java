@@ -3,6 +3,7 @@ package com.greengrowapps.ggaforms.introspection;
 
 import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
+import java.util.Locale;
 
 public class SimpleAssignator<S,T> implements Asignator<S,T> {
 
@@ -24,10 +25,42 @@ public class SimpleAssignator<S,T> implements Asignator<S,T> {
     @Override
     public void assignValue( T value ) {
         try {
-            field.set(object, value);
+            if(field.getType().isPrimitive()){
+                assignPrimitiveValue(value);
+            }
+            else {
+                field.set(object, value);
+            }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    private void assignPrimitiveValue(T value) throws IllegalAccessException {
+        if(value instanceof Boolean){
+            field.setBoolean(object, (Boolean) value);
+        }
+        else if(value instanceof Integer){
+            field.setInt(object, (Integer) value);
+        }
+        else if(value instanceof Long){
+            field.setLong(object, (Long) value);
+        }
+        else if(value instanceof Float){
+            field.setFloat(object, (Float) value);
+        }
+        else if(value instanceof Double){
+            field.setDouble(object, (Double) value);
+        }
+        else if(value instanceof Character){
+            field.setChar(object, (Character) value);
+        }
+        else if(value instanceof Byte){
+            field.setByte(object, (Byte) value);
+        }
+        else if(value instanceof Short){
+            field.setShort(object, (Short) value);
         }
     }
 

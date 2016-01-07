@@ -2,6 +2,7 @@ package com.greengrowapps.ggaforms.sample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,11 +11,13 @@ import android.widget.EditText;
 import com.greengrowapps.ggaforms.GGAForm;
 import com.greengrowapps.ggaforms.GGASection;
 import com.greengrowapps.ggaforms.TypedForm;
-import com.greengrowapps.ggaforms.fields.Inputs;
 import com.greengrowapps.ggaforms.listeners.OnValidTypedFormListener;
 import com.greengrowapps.ggaforms.validation.AnnotatedValidator;
+import com.greengrowapps.ggaformsui.Inputs;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String DEBUG_TAG = "MainActivity";
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -40,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
                 GGAForm.start()
                 .appendField("username", Inputs.newString(username))
                 .appendField("password", Inputs.newString(password))
-                .appendField("rpassword", Inputs.newString(rpassword))
+                .appendField("rPassword", Inputs.newString(rpassword))
                 .appendField("acceptedTerms", Inputs.newBoolean(terms))
-                .appendField("wantsSubscribe", Inputs.newBoolean(subscribe))
-                .appendField("newsletter", GGASection.start()
+                .appendField("wantSubscribe", Inputs.newBoolean(subscribe))
+                .appendField("subscription", GGASection.start()
                                 .appendField("email", Inputs.newString(email))
                                 .appendField("interests", GGASection.start()
                                         .appendField("likesCars", Inputs.newBoolean(cars))
@@ -77,6 +80,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void submit(RegisterForm object) {
-
+        Log.d(DEBUG_TAG, "REGISTER FORM");
+        Log.d(DEBUG_TAG, object.getUsername()+"" );
+        Log.d(DEBUG_TAG, object.getPassword()+"" );
+        Log.d(DEBUG_TAG, object.getrPassword()+"" );
+        Log.d(DEBUG_TAG, object.isAcceptedTerms()+"" );
+        Log.d(DEBUG_TAG, object.isWantSubscribe()+"" );
+        Log.d(DEBUG_TAG, object.getSubscription().getEmail()+"" );
+        Log.d(DEBUG_TAG, object.getSubscription().getInterests().isLikesCars()+"");
+        Log.d(DEBUG_TAG, object.getSubscription().getInterests().isLikesScience()+"");
+        Log.d(DEBUG_TAG, object.getSubscription().getInterests().isLikesSport()+"");
     }
 }

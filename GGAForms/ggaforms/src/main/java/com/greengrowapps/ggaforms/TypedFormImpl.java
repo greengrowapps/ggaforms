@@ -36,6 +36,7 @@ public class TypedFormImpl<T> extends SimpleFormImpl implements TypedForm<T> {
     @Override
     public TypedForm<T> addValidator(TypedFormValidator<T> validator) {
         validators.add(validator);
+        validate();
         return this;
     }
 
@@ -56,13 +57,13 @@ public class TypedFormImpl<T> extends SimpleFormImpl implements TypedForm<T> {
     }
 
     @Override
-    protected  boolean validate() {
+    protected  boolean isValidApplyingValidators() {
         ValidationResult result = new ValidationResultImpl();
         for(TypedFormValidator<T> validator : validators){
             result = ( validator.validate(introspectedObject.getObject(),result) );
         }
 
-        return result.isValid() && super.validate();
+        return result.isValid() && super.isValidApplyingValidators();
     }
 
     @Override

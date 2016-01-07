@@ -11,5 +11,7 @@ public class NewsletterSubscription {
         return email;
     }
 
-
+    public Interests getInterests() {
+        return interests;
+    }
 }
