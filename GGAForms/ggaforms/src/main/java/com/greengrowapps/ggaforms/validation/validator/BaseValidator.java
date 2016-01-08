@@ -1,23 +1,45 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
-import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
+import com.greengrowapps.ggaforms.fields.FormInput;
 
 public abstract class BaseValidator<T extends ValidationError> implements ValueValidator{
 
-    ValidationErrorProvider errorProvider;
+    private FormInput formInput;
 
-    public BaseValidator(ValidationErrorProvider errorProvider){
-        this.errorProvider = errorProvider;
-    }
 
     @Override
     public void validate(Object value, ValidationResult result) {
         if(!isValidValue(value)){
-            result.appendError( errorProvider.getValidationError( getErrorClass() )) ;
+            ValidationError validationError = getValidationError(value);
+            result.appendError( validationError ) ;
+            populateError(validationError);
+        }
+        else{
+            populateNoError();
+        }
+    }
+
+    protected void populateNoError(){
+        if(formInput!=null){
+            formInput.setError(null);
+        }
+    }
+
+    private void populateError(ValidationError validationError) {
+        if(formInput!=null) {
+            formInput.setError(validationError.getLocalizedMessage());
         }
     }
 
     protected abstract boolean isValidValue(Object value);
 
-    protected abstract Class<T> getErrorClass();
+    protected abstract ValidationError getValidationError(Object value);
+
+    public void setFormInput(FormInput formInput){
+        this.formInput = formInput;
+    }
+
+    public FormInput getFormInput() {
+        return formInput;
+    }
 }

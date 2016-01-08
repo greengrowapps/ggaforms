@@ -3,7 +3,7 @@ package com.greengrowapps.ggaforms.validation.validator;
 import com.greengrowapps.ggaforms.validation.errors.NotCheckedValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
 
-public class TrueValidator extends BaseValidator<NotCheckedValidationError> {
+public class TrueValidator extends ErrorProvidedValidator<NotCheckedValidationError> {
     public TrueValidator(ValidationErrorProvider errorProvider) {
         super(errorProvider);
     }

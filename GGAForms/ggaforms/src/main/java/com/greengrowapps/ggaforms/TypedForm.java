@@ -6,7 +6,7 @@ import com.greengrowapps.ggaforms.validation.TypedFormValidator;
 
 public interface TypedForm<T> extends SimpleForm{
 
-    TypedForm<T> addValidator(TypedFormValidator<T> validator);
+    TypedForm<T> addValidator(TypedFormValidator validator);
     TypedForm<T> setOnValidListener(OnValidTypedFormListener<T> listener);
 
     void setObject(T object);

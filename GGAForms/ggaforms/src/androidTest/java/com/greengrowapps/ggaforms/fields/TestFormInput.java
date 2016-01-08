@@ -11,7 +11,7 @@ public abstract class TestFormInput<T> extends BaseFormInput<T> {
 
     @Override
     public void setError(CharSequence error) {
-        this.error = error.toString();
+        this.error = error==null? null : error.toString();
     }
 
     public String getError() {

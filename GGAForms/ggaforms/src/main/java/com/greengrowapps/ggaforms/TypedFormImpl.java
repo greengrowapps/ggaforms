@@ -19,7 +19,7 @@ import java.util.Set;
 public class TypedFormImpl<T> extends SimpleFormImpl implements TypedForm<T> {
 
     private final IntrospectedObject<T> introspectedObject;
-    private final Set<TypedFormValidator<T>> validators = new HashSet<>();
+    private final Set<TypedFormValidator> validators = new HashSet<>();
     private OnValidTypedFormListener<T> listener;
 
     protected TypedFormImpl(InputBundle fields, Class<T> clazz, IntrospectionTools tools){
@@ -34,7 +34,7 @@ public class TypedFormImpl<T> extends SimpleFormImpl implements TypedForm<T> {
     }
 
     @Override
-    public TypedForm<T> addValidator(TypedFormValidator<T> validator) {
+    public TypedForm<T> addValidator(TypedFormValidator validator) {
         validators.add(validator);
         validate();
         return this;
@@ -59,8 +59,8 @@ public class TypedFormImpl<T> extends SimpleFormImpl implements TypedForm<T> {
     @Override
     protected  boolean isValidApplyingValidators() {
         ValidationResult result = new ValidationResultImpl();
-        for(TypedFormValidator<T> validator : validators){
-            result = ( validator.validate(introspectedObject.getObject(),result) );
+        for(TypedFormValidator validator : validators){
+            result = ( validator.validate(introspectedObject,result) );
         }
 
         return result.isValid() && super.isValidApplyingValidators();

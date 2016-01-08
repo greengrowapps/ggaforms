@@ -4,27 +4,36 @@ import com.greengrowapps.ggaforms.fields.FormInput;
 import com.greengrowapps.ggaforms.validation.InputBundle;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class IntrospectedObjectImpl<T> implements IntrospectedObject<T> , Asignator<T,InputBundle>{
 
     private T object;
     private final Map<String,Asignator> asignatorMap = new HashMap<>();
-    private final InputBundle fields;
+    private final Map<Field,FormInput> inputMap = new HashMap<>();
+    private final InputBundle inputs;
+    private final List<IntrospectedObjectImpl> innerObjects = new ArrayList<>();
 
-    public IntrospectedObjectImpl(T object, InputBundle fields, AsignatorFactory asignatorFactory) throws FieldNotFoundException, NonBuildableException {
+    public IntrospectedObjectImpl(T object, InputBundle inputs, AsignatorFactory asignatorFactory) throws FieldNotFoundException, NonBuildableException {
 
         this.object = object;
-        this.fields = fields;
+        this.inputs = inputs;
 
-        for(String property : fields.getPropertiesNames() ){
+        for(String property : inputs.getPropertiesNames() ){
 
-            FormInput formInput = fields.getInputNamed(property);
+            FormInput formInput = inputs.getInputNamed(property);
+            Field field = getFieldNamed(property);
+            inputMap.put(field, formInput);
 
             if(formInput.getType().isAssignableFrom(InputBundle.class)){
-                Object subObject = getObjectProperty(property);
-                asignatorMap.put(property, new IntrospectedObjectImpl(subObject, (InputBundle) formInput.getValue(), asignatorFactory));
+
+                Object subObject = getObjectFromField(field);
+                IntrospectedObjectImpl introspectedObject = new IntrospectedObjectImpl(subObject, (InputBundle) formInput.getValue(), asignatorFactory);
+                innerObjects.add(introspectedObject);
+                asignatorMap.put(property, introspectedObject);
             }
             else{
                 asignatorMap.put( property, asignatorFactory.buildForType( formInput.getType(), property, object));
@@ -32,14 +41,21 @@ public class IntrospectedObjectImpl<T> implements IntrospectedObject<T> , Asigna
         }
     }
 
-    private Object getObjectProperty(String property) throws FieldNotFoundException, NonBuildableException {
+    private Field getFieldNamed(String property) throws FieldNotFoundException {
+        Class<?> clazz = object.getClass();
+        try {
+            return clazz.getDeclaredField(property);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+            throw new FieldNotFoundException(property);
+        }
+    }
+
+    private Object getObjectFromField(Field field) throws FieldNotFoundException, NonBuildableException {
 
         Class subClass = null;
 
         try {
-
-            Class<?> clazz = object.getClass();
-            Field field = clazz.getDeclaredField(property);
             field.setAccessible(true);
             Object value = field.get(object);
             if(value==null){
@@ -48,10 +64,6 @@ public class IntrospectedObjectImpl<T> implements IntrospectedObject<T> , Asigna
                 field.set(object,value);
             }
             return value;
-
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-            throw new FieldNotFoundException(property);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (InstantiationException e) {
@@ -88,13 +100,14 @@ public class IntrospectedObjectImpl<T> implements IntrospectedObject<T> , Asigna
         try {
             for(String property : asignatorMap.keySet()){
                 Asignator assignator = asignatorMap.get(property);
+                Object objField = getObjectFromField(getFieldNamed(property));
 
                 if(assignator instanceof IntrospectedObject){
-                    asignatorMap.get(property).setTarget( getObjectProperty(property) );
+                    asignatorMap.get(property).setTarget( objField );
                 }
                 else{
                     asignatorMap.get(property).setTarget(target);
-                    fields.getInputNamed(property).setValue( getObjectProperty(property) );
+                    inputs.getInputNamed(property).setValue( objField );
                 }
             }
         } catch (FieldNotFoundException e) {
@@ -102,5 +115,20 @@ public class IntrospectedObjectImpl<T> implements IntrospectedObject<T> , Asigna
         } catch (NonBuildableException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public FormInput getInputFrom(Field field) {
+        FormInput input = inputMap.get(field);
+        if(input!=null){
+            return input;
+        }
+        for(IntrospectedObject inner : innerObjects){
+            input = inner.getInputFrom(field);
+            if(input!=null){
+                return input;
+            }
+        }
+        return null;
     }
 }

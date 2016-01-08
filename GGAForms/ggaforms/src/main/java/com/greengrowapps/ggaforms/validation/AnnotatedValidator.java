@@ -1,6 +1,7 @@
 package com.greengrowapps.ggaforms.validation;
 
 
+import com.greengrowapps.ggaforms.introspection.IntrospectedObject;
 import com.greengrowapps.ggaforms.validation.annotations.NotNull;
 import com.greengrowapps.ggaforms.validation.annotations.True;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
@@ -16,7 +17,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnnotatedValidator<T> implements TypedFormValidator<T>{
+public class AnnotatedValidator implements TypedFormValidator{
 
     Map<String,ValueValidator> validatorMap = new HashMap<>();
 
@@ -25,13 +26,19 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
         validatorMap.put(True.class.getCanonicalName(), new TrueValidator(errorProvider));
     }
 
-    public static <T> AnnotatedValidator<T> buildFor(Class<T> clazz){
-        return new AnnotatedValidator<>( ValidationErrorProviderImpl.getInstance() );
+    public static AnnotatedValidator newInstance(){
+        return new AnnotatedValidator(ValidationErrorProviderImpl.getInstance());
     }
 
     @Override
-    public ValidationResult validate(Object object, ValidationResult result) {
+    public ValidationResult validate(IntrospectedObject introspectedObject, ValidationResult result) {
 
+        Object object = introspectedObject.getObject();
+
+        return validateObject(introspectedObject, object, result);
+    }
+
+    private ValidationResult validateObject(IntrospectedObject introspectedObject, Object object, ValidationResult result) {
         if(object==null){
             return result;
         }
@@ -40,7 +47,7 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
         for(Field field : clazz.getDeclaredFields()){
             for ( Annotation annotation : field.getAnnotations()){
                 if(hasValidator(annotation)){
-                    validate(field, object, annotation, result);
+                    validate(introspectedObject,field, object, annotation, result);
                 }
             }
             Class fieldClass = field.getType();
@@ -55,7 +62,7 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
                 try {
                     field.setAccessible(true);
                     Object subObject = field.get(object);
-                    result = validate(subObject,result);
+                    result = validateObject(introspectedObject, subObject, result);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
@@ -69,11 +76,13 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
         return validatorMap.containsKey(annotationClass);
     }
 
-    private void validate(Field field, Object object, Annotation annotation, ValidationResult result) {
+    private void validate(IntrospectedObject introspectedObject, Field field, Object object, Annotation annotation, ValidationResult result) {
         field.setAccessible(true);
         try {
             Object value = field.get(object);
-            getValidator(annotation).validate(value, result);
+            ValueValidator validator = getValidator(annotation);
+            validator.setFormInput(introspectedObject.getInputFrom(field));
+            validator.validate(value, result);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +92,7 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
         return validatorMap.get(annotation.annotationType().getCanonicalName());
     }
 
-    public AnnotatedValidator<T> registerAnnotation(Class clazz, ValueValidator validator){
+    public AnnotatedValidator registerAnnotation(Class clazz, ValueValidator validator){
         validatorMap.put(clazz.getCanonicalName(), validator);
         return this;
     }

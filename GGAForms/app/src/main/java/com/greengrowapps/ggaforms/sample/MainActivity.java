@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                                 .build()
                 )
                 .buildTyped(RegisterForm.class)
-                .addValidator( AnnotatedValidator.buildFor(RegisterForm.class) )
+                .addValidator( AnnotatedValidator.newInstance() )
                 .setOnValidListener(new OnValidTypedFormListener<RegisterForm>() {
                     @Override
                     public void onFormValid(TypedForm<RegisterForm> form, RegisterForm object) {

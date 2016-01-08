@@ -1,6 +1,8 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
 
+import com.greengrowapps.ggaforms.fields.FormInput;
+
 public class ValidationErrorImpl implements ValidationError {
     private CharSequence localizedMessage;
 
@@ -12,5 +14,7 @@ public class ValidationErrorImpl implements ValidationError {
     public CharSequence getLocalizedMessage() {
         return localizedMessage;
     }
+
+
 
 }

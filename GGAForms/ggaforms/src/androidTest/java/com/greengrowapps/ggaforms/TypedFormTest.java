@@ -3,6 +3,9 @@ package com.greengrowapps.ggaforms;
 
 import android.test.AndroidTestCase;
 
+import com.greengrowapps.ggaforms.annotations.NotNumbersValidationError;
+import com.greengrowapps.ggaforms.annotations.OnlyNumbers;
+import com.greengrowapps.ggaforms.annotations.OnlyNumbersValidator;
 import com.greengrowapps.ggaforms.dto.MainObj;
 import com.greengrowapps.ggaforms.dto.NestedObj;
 import com.greengrowapps.ggaforms.fields.BooleanFormInput;
@@ -115,7 +118,7 @@ public class TypedFormTest extends AndroidTestCase{
                                 .build()
                 )
                 .buildTyped(MainObj.class)
-                .addValidator(AnnotatedValidator.buildFor(MainObj.class));
+                .addValidator(AnnotatedValidator.newInstance());
 
         assertFalse(form.isValid());
 
@@ -145,7 +148,7 @@ public class TypedFormTest extends AndroidTestCase{
                                 .build()
                 )
                 .buildTyped(MainObj.class)
-                .addValidator(AnnotatedValidator.buildFor(MainObj.class));
+                .addValidator(AnnotatedValidator.newInstance());
 
         nameField.setText("Joselito");
         subscribedField.setChecked(true);
@@ -171,12 +174,45 @@ public class TypedFormTest extends AndroidTestCase{
                                 .build()
                 )
                 .buildTyped(MainObj.class)
-                .addValidator(AnnotatedValidator.buildFor(MainObj.class));
+                .addValidator(AnnotatedValidator.newInstance());
 
         nameField.setText("Joselito");
         subscribedField.setChecked(true);
 
-        assertEquals( getContext().getResources().getString( R.string.fillThisField),
-                petName.getError() );
+        assertFalse(form.isValid());
+        assertEquals(getContext().getResources().getString(R.string.fillThisField),
+                petName.getError());
+    }
+
+    public void testCustomAnnotation(){
+        StringFormInput nameField = new StringFormInput();
+        BooleanFormInput subscribedField = new BooleanFormInput();
+
+        StringFormInput petName = new StringFormInput();
+        StringFormInput idField = new StringFormInput();
+
+
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
+                .appendField("name", nameField)
+                .appendField("subscribed", subscribedField)
+                .appendField("nested", GGASection.start()
+                                .appendField("petName", petName)
+                                .appendField("id",idField)
+                                .build()
+                )
+                .buildTyped(MainObj.class)
+                .addValidator(AnnotatedValidator.newInstance()
+                        .registerAnnotation(OnlyNumbers.class, new OnlyNumbersValidator()));
+
+        nameField.setText("Joselito");
+        subscribedField.setChecked(true);
+        petName.setText("Perro");
+        idField.setText("abc");
+
+        assertFalse(form.isValid());
+        assertEquals(new NotNumbersValidationError().getLocalizedMessage() , idField.getError() );
+
+        idField.setText("123");
+        assertTrue(form.isValid());
     }
 }
