@@ -20,7 +20,7 @@ public class TypedFormTest extends AndroidTestCase{
         StringFormInput petName = new StringFormInput();
 
 
-        TypedForm<MainObj> form = GGAForm.start()
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
                 .appendField("name", nameField)
                 .appendField("subscribed", subscribedField)
                 .appendField("nested", GGASection.start()
@@ -47,7 +47,7 @@ public class TypedFormTest extends AndroidTestCase{
 
         MainObj mainObj = new MainObj();
 
-        TypedForm<MainObj> form = GGAForm.start()
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
                 .appendField("name", nameField)
                 .appendField("subscribed", subscribedField)
                 .appendField("nested", GGASection.start()
@@ -82,7 +82,7 @@ public class TypedFormTest extends AndroidTestCase{
         mainObj.setSubscribed(true);
         mainObj.setNested(nested);
 
-        TypedForm<MainObj> form = GGAForm.start()
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
                 .appendField("name", nameField)
                 .appendField("subscribed", subscribedField)
                 .appendField("nested", GGASection.start()
@@ -107,7 +107,7 @@ public class TypedFormTest extends AndroidTestCase{
         StringFormInput petName = new StringFormInput();
 
 
-        TypedForm<MainObj> form = GGAForm.start()
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
                 .appendField("name", nameField)
                 .appendField("subscribed", subscribedField)
                 .appendField("nested", GGASection.start()
@@ -137,7 +137,7 @@ public class TypedFormTest extends AndroidTestCase{
         StringFormInput petName = new StringFormInput();
 
 
-        TypedForm<MainObj> form = GGAForm.start()
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
                 .appendField("name", nameField)
                 .appendField("subscribed", subscribedField)
                 .appendField("nested", GGASection.start()
@@ -154,5 +154,29 @@ public class TypedFormTest extends AndroidTestCase{
         assertEquals("Joselito", form.getObject().getName());
         assertTrue(form.getObject().isSubscribed());
         assertEquals( "Perro", form.getObject().getNested().getPetName() );
+    }
+
+    public void testLocalizedErrors(){
+        StringFormInput nameField = new StringFormInput();
+        BooleanFormInput subscribedField = new BooleanFormInput();
+
+        StringFormInput petName = new StringFormInput();
+
+
+        TypedForm<MainObj> form = GGAForm.startWithContext(getContext())
+                .appendField("name", nameField)
+                .appendField("subscribed", subscribedField)
+                .appendField("nested", GGASection.start()
+                                .appendField("petName", petName)
+                                .build()
+                )
+                .buildTyped(MainObj.class)
+                .addValidator(AnnotatedValidator.buildFor(MainObj.class));
+
+        nameField.setText("Joselito");
+        subscribedField.setChecked(true);
+
+        assertEquals( getContext().getResources().getString( R.string.fillThisField),
+                petName.getError() );
     }
 }

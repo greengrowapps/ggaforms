@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         final Button submit = (Button)findViewById(R.id.submit);
 
         final TypedForm<RegisterForm> form =
-                GGAForm.start()
+                GGAForm.startWithContext(this)
                 .appendField("username", Inputs.newString(username))
                 .appendField("password", Inputs.newString(password))
                 .appendField("rPassword", Inputs.newString(rpassword))

@@ -3,7 +3,9 @@ package com.greengrowapps.ggaforms.validation;
 
 import com.greengrowapps.ggaforms.fields.FormInput;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,5 +23,9 @@ public class InputBundle {
 
     public FormInput getInputNamed(String key) {
         return fieldMap.get(key);
+    }
+
+    public List<FormInput> getFields() {
+        return new ArrayList<FormInput>(fieldMap.values());
     }
 }

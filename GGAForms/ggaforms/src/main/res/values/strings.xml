@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GGAForms</string>
+    <string name="fillThisField">Fill this field</string>
+    <string name="notCheckedError">Must be checked</string>
 </resources>

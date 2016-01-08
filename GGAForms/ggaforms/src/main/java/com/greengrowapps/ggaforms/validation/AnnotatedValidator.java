@@ -3,8 +3,11 @@ package com.greengrowapps.ggaforms.validation;
 
 import com.greengrowapps.ggaforms.validation.annotations.NotNull;
 import com.greengrowapps.ggaforms.validation.annotations.True;
+import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
+import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProviderImpl;
 import com.greengrowapps.ggaforms.validation.validator.NotNullValidator;
 import com.greengrowapps.ggaforms.validation.validator.TrueValidator;
+import com.greengrowapps.ggaforms.validation.validator.ValidationError;
 import com.greengrowapps.ggaforms.validation.validator.ValidationResult;
 import com.greengrowapps.ggaforms.validation.validator.ValueValidator;
 
@@ -17,13 +20,13 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
 
     Map<String,ValueValidator> validatorMap = new HashMap<>();
 
-    private AnnotatedValidator(){
-        validatorMap.put(NotNull.class.getCanonicalName(), new NotNullValidator());
-        validatorMap.put(True.class.getCanonicalName(), new TrueValidator());
+    private AnnotatedValidator(ValidationErrorProvider errorProvider){
+        validatorMap.put(NotNull.class.getCanonicalName(), new NotNullValidator(errorProvider));
+        validatorMap.put(True.class.getCanonicalName(), new TrueValidator(errorProvider));
     }
 
     public static <T> AnnotatedValidator<T> buildFor(Class<T> clazz){
-        return new AnnotatedValidator<>();
+        return new AnnotatedValidator<>( ValidationErrorProviderImpl.getInstance() );
     }
 
     @Override
@@ -78,5 +81,10 @@ public class AnnotatedValidator<T> implements TypedFormValidator<T>{
 
     private ValueValidator getValidator(Annotation annotation) {
         return validatorMap.get(annotation.annotationType().getCanonicalName());
+    }
+
+    public AnnotatedValidator<T> registerAnnotation(Class clazz, ValueValidator validator){
+        validatorMap.put(clazz.getCanonicalName(), validator);
+        return this;
     }
 }
