@@ -9,9 +9,4 @@ public class StringFormInput extends TestFormInput {
     public void setText(String text) {
         setValue(text);
     }
-
-    @Override
-    public void setValid() {
-
-    }
 }

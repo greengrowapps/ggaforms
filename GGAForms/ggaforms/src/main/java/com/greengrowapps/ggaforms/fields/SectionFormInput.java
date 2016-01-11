@@ -4,6 +4,7 @@ package com.greengrowapps.ggaforms.fields;
 import com.greengrowapps.ggaforms.listeners.OnInputChangedListener;
 import com.greengrowapps.ggaforms.listeners.OnValidSectionListener;
 import com.greengrowapps.ggaforms.validation.InputBundle;
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 
 public class SectionFormInput extends BaseFormInput implements OnInputChangedListener {
 
@@ -22,18 +23,12 @@ public class SectionFormInput extends BaseFormInput implements OnInputChangedLis
     }
 
     @Override
-    public void setError(CharSequence error) {
+    public void setError(ValidationError error) {
         if(listener!=null){
-            listener.onSectionInvalid(error);
+            listener.onSectionInvalid( error!=null? error.getLocalizedMessage() : null );
         }
     }
 
-    @Override
-    public void setValid() {
-        if(listener!=null){
-            listener.onSectionValid();
-        }
-    }
 
     @Override
     public void onFieldChanged(FormInput formInput) {

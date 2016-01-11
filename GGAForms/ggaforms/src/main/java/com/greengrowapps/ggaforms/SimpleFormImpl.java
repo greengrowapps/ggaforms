@@ -5,7 +5,6 @@ import com.greengrowapps.ggaforms.listeners.OnInputChangedListener;
 import com.greengrowapps.ggaforms.listeners.OnSimpleFormListener;
 import com.greengrowapps.ggaforms.validation.InputBundle;
 import com.greengrowapps.ggaforms.validation.SimpleFormValidator;
-import com.greengrowapps.ggaforms.validation.validator.ValidationError;
 import com.greengrowapps.ggaforms.validation.validator.ValidationResult;
 import com.greengrowapps.ggaforms.validation.validator.ValidationResultImpl;
 

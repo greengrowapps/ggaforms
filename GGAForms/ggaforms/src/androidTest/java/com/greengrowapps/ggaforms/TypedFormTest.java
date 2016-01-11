@@ -8,6 +8,7 @@ import com.greengrowapps.ggaforms.annotations.OnlyNumbers;
 import com.greengrowapps.ggaforms.annotations.OnlyNumbersValidator;
 import com.greengrowapps.ggaforms.dto.MainObj;
 import com.greengrowapps.ggaforms.dto.NestedObj;
+import com.greengrowapps.ggaforms.dto.UserObj;
 import com.greengrowapps.ggaforms.fields.BooleanFormInput;
 import com.greengrowapps.ggaforms.fields.StringFormInput;
 import com.greengrowapps.ggaforms.validation.AnnotatedValidator;
@@ -210,9 +211,28 @@ public class TypedFormTest extends AndroidTestCase{
         idField.setText("abc");
 
         assertFalse(form.isValid());
-        assertEquals(new NotNumbersValidationError().getLocalizedMessage() , idField.getError() );
+        assertEquals(new NotNumbersValidationError().getLocalizedMessage(), idField.getError());
 
         idField.setText("123");
+        assertTrue(form.isValid());
+    }
+
+    public void testAnnotationWithParameters(){
+        StringFormInput usernameField = new StringFormInput();
+
+        TypedForm<UserObj> form = GGAForm.startWithContext(getContext())
+                .appendField("username", usernameField)
+                .buildTyped(UserObj.class)
+                .addValidator(AnnotatedValidator.newInstance());
+
+        usernameField.setText("1234567890123");
+
+        assertEquals("1234567890123", form.getObject().getUsername());
+
+        assertFalse(form.isValid());
+        assertEquals( getContext().getResources().getString(R.string.exceedsMaxLenght,10) , usernameField.getError() );
+
+        usernameField.setText("username");
         assertTrue(form.isValid());
     }
 }

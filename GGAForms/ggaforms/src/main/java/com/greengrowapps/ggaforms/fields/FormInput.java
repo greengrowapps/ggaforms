@@ -1,13 +1,13 @@
 package com.greengrowapps.ggaforms.fields;
 
 import com.greengrowapps.ggaforms.listeners.OnInputChangedListener;
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 
 public interface FormInput<T> {
 
     void setOnInputChangedListener(OnInputChangedListener listener);
 
-    void setError(CharSequence error);
-    void setValid();
+    void setError(ValidationError error);
 
     Class<T> getType();
     T getValue();

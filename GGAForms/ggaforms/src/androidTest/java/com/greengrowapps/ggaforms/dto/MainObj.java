@@ -1,6 +1,7 @@
 package com.greengrowapps.ggaforms.dto;
 
 
+import com.greengrowapps.ggaforms.validation.annotations.MaxLength;
 import com.greengrowapps.ggaforms.validation.annotations.NotNull;
 import com.greengrowapps.ggaforms.validation.annotations.True;
 

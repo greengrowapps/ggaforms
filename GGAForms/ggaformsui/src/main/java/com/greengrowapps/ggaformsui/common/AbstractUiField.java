@@ -1,10 +1,11 @@
 package com.greengrowapps.ggaformsui.common;
 
 import com.greengrowapps.ggaforms.fields.BaseFormInput;
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 
 public class AbstractUiField<T> extends BaseFormInput<T> {
 
-    private CharSequence currentError = null;
+    private ValidationError currentError = null;
     private DisplayErrorListener displayErrorListener;
 
     public AbstractUiField(Class<T> clazz) {
@@ -16,22 +17,17 @@ public class AbstractUiField<T> extends BaseFormInput<T> {
     }
 
     @Override
-    public void setError(CharSequence error) {
+    public void setError(ValidationError error) {
         this.currentError = error;
         displayError();
     }
 
-    @Override
-    public void setValid() {
-        currentError = null;
-        displayError();
-    }
 
     protected void displayError(){
         onDisplayError(currentError);
     }
 
-    protected void onDisplayError(CharSequence currentError) {
+    protected void onDisplayError(ValidationError currentError) {
         if(displayErrorListener!=null){
             if(currentError==null){
                 displayErrorListener.onHideError();

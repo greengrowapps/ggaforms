@@ -3,6 +3,7 @@ package com.greengrowapps.ggaformsui.textinputlayout;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextWatcher;
 
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 import com.greengrowapps.ggaformsui.edittext.AbstractEditTextField;
 
 public abstract class AsbstractInputLayoutField<T> extends AbstractEditTextField<T> implements TextWatcher {
@@ -15,8 +16,8 @@ public abstract class AsbstractInputLayoutField<T> extends AbstractEditTextField
     }
 
     @Override
-    protected void onDisplayError(CharSequence currentError) {
+    protected void onDisplayError(ValidationError currentError) {
         super.onDisplayError(currentError);
-        textInputLayout.setError(currentError);
+        textInputLayout.setError(currentError!=null? currentError.getLocalizedMessage() : null);
     }
 }

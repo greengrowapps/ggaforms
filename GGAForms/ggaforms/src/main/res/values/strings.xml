@@ -2,4 +2,5 @@
     <string name="app_name">GGAForms</string>
     <string name="fillThisField">Fill this field</string>
     <string name="notCheckedError">Must be checked</string>
+    <string name="exceedsMaxLenght">Use maximum %1$s characters</string>
 </resources>

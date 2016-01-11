@@ -10,9 +10,4 @@ public class BooleanFormInput extends TestFormInput<Boolean> {
     public void setChecked(boolean checked) {
         setValue(checked);
     }
-
-    @Override
-    public void setValid() {
-
-    }
 }

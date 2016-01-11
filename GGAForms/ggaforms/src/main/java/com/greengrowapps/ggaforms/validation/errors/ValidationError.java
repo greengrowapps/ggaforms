@@ -1,4 +1,4 @@
-package com.greengrowapps.ggaforms.validation.validator;
+package com.greengrowapps.ggaforms.validation.errors;
 
 
 public interface ValidationError {

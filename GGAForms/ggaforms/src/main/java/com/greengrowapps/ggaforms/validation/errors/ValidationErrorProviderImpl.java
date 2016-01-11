@@ -2,8 +2,6 @@ package com.greengrowapps.ggaforms.validation.errors;
 
 import android.content.res.Resources;
 
-import com.greengrowapps.ggaforms.validation.validator.ValidationError;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,11 +9,29 @@ import java.util.Map;
 public class ValidationErrorProviderImpl implements ValidationErrorProvider {
 
     private static ValidationErrorProviderImpl instance;
-    Map<Class<? extends ValidationError>, ValidationError> validationErrorMap = new HashMap<>();
+    private final Resources resources;
+    private Map<Class<? extends ValidationError>, ErrorBuilder> validationErrorMap = new HashMap<>();
 
-    private ValidationErrorProviderImpl(Resources resources){
-        registerErrorForClass(NullFieldValidationError.class, new NullFieldValidationError(resources));
-        registerErrorForClass(NotCheckedValidationError.class, new NotCheckedValidationError(resources));
+    private ValidationErrorProviderImpl( Resources res ){
+        this.resources = res;
+        registerErrorForClass(NullFieldValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return new NullFieldValidationError(resources);
+            }
+        });
+        registerErrorForClass(NotCheckedValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return new NotCheckedValidationError(resources);
+            }
+        });
+        registerErrorForClass(ExceedsMaxLengthValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return new ExceedsMaxLengthValidationError(resources, params);
+            }
+        });
     }
 
     public static void init(Resources resources){
@@ -34,11 +50,11 @@ public class ValidationErrorProviderImpl implements ValidationErrorProvider {
     }
 
     @Override
-    public ValidationError getValidationError(Class<? extends ValidationError> clazz) {
-        return validationErrorMap.get(clazz);
+    public ValidationError getValidationError(Class<? extends ValidationError> clazz, Object ... params) {
+        return validationErrorMap.get(clazz).build(params);
     }
 
-    public void registerErrorForClass(Class<? extends ValidationError> clazz, ValidationError error){
+    public void registerErrorForClass(Class<? extends ValidationError> clazz, ErrorBuilder error){
         validationErrorMap.put(clazz,error);
     }
 }

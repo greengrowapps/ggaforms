@@ -1,6 +1,8 @@
 package com.greengrowapps.ggaforms.fields;
 
 
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
+
 public abstract class TestFormInput<T> extends BaseFormInput<T> {
 
     String error;
@@ -10,8 +12,8 @@ public abstract class TestFormInput<T> extends BaseFormInput<T> {
     }
 
     @Override
-    public void setError(CharSequence error) {
-        this.error = error==null? null : error.toString();
+    public void setError(ValidationError error) {
+        this.error = error==null? null : error.getLocalizedMessage().toString();
     }
 
     public String getError() {

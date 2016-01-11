@@ -2,13 +2,14 @@ package com.greengrowapps.ggaforms.validation;
 
 
 import com.greengrowapps.ggaforms.introspection.IntrospectedObject;
+import com.greengrowapps.ggaforms.validation.annotations.MaxLength;
 import com.greengrowapps.ggaforms.validation.annotations.NotNull;
 import com.greengrowapps.ggaforms.validation.annotations.True;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProviderImpl;
+import com.greengrowapps.ggaforms.validation.validator.MaxLengthValidator;
 import com.greengrowapps.ggaforms.validation.validator.NotNullValidator;
 import com.greengrowapps.ggaforms.validation.validator.TrueValidator;
-import com.greengrowapps.ggaforms.validation.validator.ValidationError;
 import com.greengrowapps.ggaforms.validation.validator.ValidationResult;
 import com.greengrowapps.ggaforms.validation.validator.ValueValidator;
 
@@ -24,6 +25,7 @@ public class AnnotatedValidator implements TypedFormValidator{
     private AnnotatedValidator(ValidationErrorProvider errorProvider){
         validatorMap.put(NotNull.class.getCanonicalName(), new NotNullValidator(errorProvider));
         validatorMap.put(True.class.getCanonicalName(), new TrueValidator(errorProvider));
+        validatorMap.put(MaxLength.class.getCanonicalName(), new MaxLengthValidator(errorProvider));
     }
 
     public static AnnotatedValidator newInstance(){
@@ -47,7 +49,9 @@ public class AnnotatedValidator implements TypedFormValidator{
         for(Field field : clazz.getDeclaredFields()){
             for ( Annotation annotation : field.getAnnotations()){
                 if(hasValidator(annotation)){
-                    validate(introspectedObject,field, object, annotation, result);
+                    if(!validate(introspectedObject,field, object, annotation, result)){
+                        break;
+                    }
                 }
             }
             Class fieldClass = field.getType();
@@ -76,13 +80,14 @@ public class AnnotatedValidator implements TypedFormValidator{
         return validatorMap.containsKey(annotationClass);
     }
 
-    private void validate(IntrospectedObject introspectedObject, Field field, Object object, Annotation annotation, ValidationResult result) {
+    private boolean validate(IntrospectedObject introspectedObject, Field field, Object object, Annotation annotation, ValidationResult result) {
         field.setAccessible(true);
         try {
             Object value = field.get(object);
             ValueValidator validator = getValidator(annotation);
             validator.setFormInput(introspectedObject.getInputFrom(field));
-            validator.validate(value, result);
+            validator.setAnnotation(annotation);
+            return validator.validate(value, result);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
