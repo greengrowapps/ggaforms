@@ -12,4 +12,6 @@ public interface FormInput<T> {
     Class<T> getType();
     T getValue();
     void setValue(T value);
+
+    ValidationError getError();
 }

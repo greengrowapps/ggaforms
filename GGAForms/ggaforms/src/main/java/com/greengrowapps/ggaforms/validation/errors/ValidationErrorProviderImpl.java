@@ -32,6 +32,18 @@ public class ValidationErrorProviderImpl implements ValidationErrorProvider {
                 return new ExceedsMaxLengthValidationError(resources, params);
             }
         });
+        registerErrorForClass(ExceedsMinLengthValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return new ExceedsMinLengthValidationError(resources, params);
+            }
+        });
+        registerErrorForClass(TwinValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return new TwinValidationError(resources);
+            }
+        });
     }
 
     public static void init(Resources resources){

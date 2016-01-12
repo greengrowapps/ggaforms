@@ -1,26 +1,22 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
-import android.content.res.Resources;
-
-import com.greengrowapps.ggaforms.validation.annotations.MaxLength;
-import com.greengrowapps.ggaforms.validation.annotations.MinLength;
+import com.greengrowapps.ggaforms.fields.FormInput;
 import com.greengrowapps.ggaforms.validation.errors.ExceedsMaxLengthValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
-
-import java.lang.annotation.Annotation;
 
 
 public class MaxLengthValidator extends ErrorProvidedValidator<ExceedsMaxLengthValidationError> {
 
     int maxLength = Integer.MAX_VALUE;
 
-    public MaxLengthValidator(ValidationErrorProvider errorProvider) {
-        super(errorProvider);
+    public MaxLengthValidator(FormInput formInput, ValidationErrorProvider errorProvider, int length) {
+        super(formInput,errorProvider);
+        maxLength = length;
     }
 
     @Override
-    protected boolean isValidValue(Object value) {
+    protected boolean isValidValue(Object parent, Object value) {
 
         if(value!=null && value instanceof CharSequence) {
             CharSequence toCheck = (CharSequence) value;
@@ -40,9 +36,4 @@ public class MaxLengthValidator extends ErrorProvidedValidator<ExceedsMaxLengthV
         return ExceedsMaxLengthValidationError.class;
     }
 
-    @Override
-    public void setAnnotation(Annotation annotation) {
-        super.setAnnotation(annotation);
-        maxLength = ((MaxLength)annotation).length();
-    }
 }

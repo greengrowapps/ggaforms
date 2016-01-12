@@ -24,6 +24,7 @@ public class SectionFormInput extends BaseFormInput implements OnInputChangedLis
 
     @Override
     public void setError(ValidationError error) {
+        super.setError(error);
         if(listener!=null){
             listener.onSectionInvalid( error!=null? error.getLocalizedMessage() : null );
         }

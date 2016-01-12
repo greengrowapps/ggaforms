@@ -1,6 +1,7 @@
 package com.greengrowapps.ggaforms.fields;
 
 import com.greengrowapps.ggaforms.listeners.OnInputChangedListener;
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 
 
 public abstract class BaseFormInput<T> implements FormInput<T> {
@@ -8,6 +9,7 @@ public abstract class BaseFormInput<T> implements FormInput<T> {
     private final Class<T> clazz;
     private OnInputChangedListener listener;
     private T value;
+    private ValidationError error;
 
     public BaseFormInput(Class<T> clazz){
         this.clazz = clazz;
@@ -38,5 +40,15 @@ public abstract class BaseFormInput<T> implements FormInput<T> {
     @Override
     public Class<T> getType() {
         return clazz;
+    }
+
+    @Override
+    public void setError(ValidationError error) {
+        this.error = error;
+    }
+
+    @Override
+    public ValidationError getError() {
+        return error;
     }
 }

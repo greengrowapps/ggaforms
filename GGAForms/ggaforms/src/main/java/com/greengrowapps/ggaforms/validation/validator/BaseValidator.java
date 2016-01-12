@@ -3,18 +3,20 @@ package com.greengrowapps.ggaforms.validation.validator;
 import com.greengrowapps.ggaforms.fields.FormInput;
 import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 
-import java.lang.annotation.Annotation;
 
 public abstract class BaseValidator<T extends ValidationError> implements ValueValidator{
 
-    private Annotation annotation;
     private FormInput formInput;
 
+    public BaseValidator(FormInput input){
+        this.formInput = input;
+    }
+
     @Override
-    public boolean validate(Object value, ValidationResult result) {
-        if(!isValidValue(value)){
+    public boolean validate(Object parent, Object value, ValidationResult result) {
+        if(!isValidValue(parent,value)){
             ValidationError validationError = getValidationError(value);
-            result.appendError( validationError ) ;
+            result.appendError(validationError) ;
             populateError(validationError);
             return false;
         }
@@ -36,24 +38,11 @@ public abstract class BaseValidator<T extends ValidationError> implements ValueV
         }
     }
 
-    protected abstract boolean isValidValue(Object value);
+    protected abstract boolean isValidValue(Object parent,Object value);
 
     protected abstract ValidationError getValidationError(Object value);
 
-    public void setFormInput(FormInput formInput){
-        this.formInput = formInput;
-    }
-
     public FormInput getFormInput() {
         return formInput;
-    }
-
-    @Override
-    public void setAnnotation(Annotation annotation) {
-        this.annotation = annotation;
-    }
-
-    public Annotation getAnnotation() {
-        return annotation;
     }
 }

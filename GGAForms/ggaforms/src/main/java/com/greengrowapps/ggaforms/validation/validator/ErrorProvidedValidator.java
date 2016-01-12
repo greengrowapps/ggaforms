@@ -1,5 +1,6 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
+import com.greengrowapps.ggaforms.fields.FormInput;
 import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
 
@@ -7,7 +8,8 @@ public abstract class ErrorProvidedValidator<T extends ValidationError> extends 
 
     ValidationErrorProvider errorProvider;
 
-    public ErrorProvidedValidator(ValidationErrorProvider errorProvider){
+    public ErrorProvidedValidator(FormInput formInput, ValidationErrorProvider errorProvider){
+        super(formInput);
         this.errorProvider = errorProvider;
     }
 

@@ -13,10 +13,11 @@ public abstract class TestFormInput<T> extends BaseFormInput<T> {
 
     @Override
     public void setError(ValidationError error) {
+        super.setError(error);
         this.error = error==null? null : error.getLocalizedMessage().toString();
     }
 
-    public String getError() {
+    public String getErrorString() {
         return error;
     }
 }

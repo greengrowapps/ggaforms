@@ -12,7 +12,7 @@ import com.greengrowapps.ggaforms.GGAForm;
 import com.greengrowapps.ggaforms.GGASection;
 import com.greengrowapps.ggaforms.TypedForm;
 import com.greengrowapps.ggaforms.listeners.OnValidTypedFormListener;
-import com.greengrowapps.ggaforms.validation.AnnotatedValidator;
+import com.greengrowapps.ggaforms.validation.validator.AnnotatedValidator;
 import com.greengrowapps.ggaformsui.Inputs;
 
 public class MainActivity extends AppCompatActivity {

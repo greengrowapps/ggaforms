@@ -3,4 +3,6 @@
     <string name="fillThisField">Fill this field</string>
     <string name="notCheckedError">Must be checked</string>
     <string name="exceedsMaxLenght">Use maximum %1$s characters</string>
+    <string name="exceedsMinLength">Must be at least %1$s characters</string>
+    <string name="fieldsAreNotEqual">Fields are not equal</string>
 </resources>
