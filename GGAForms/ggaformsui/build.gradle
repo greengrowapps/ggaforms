@@ -27,3 +27,4 @@ dependencies {
     compile 'com.greengrowapps:ggaforms:0.1'
 }
 
+apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
