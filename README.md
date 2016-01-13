@@ -1,1 +1,104 @@
-# ggaforms
+### GgaForms
+![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.greengrowapps/ggaforms/badge.svg?style=flat)
+![Travis](https://travis-ci.org/greengrowapps/ggaforms.svg)
+
+### Introduction
+This library makes it easy to work with forms in Android. How many times have you take the text from edittexts or have populated an object to the UI. And how many times have you validated this object and populated the error. With this library you have a confortable builder interface that allows to easily define and conect your object with the UI. You will be able to retrieve and populate your data saving hundrets of boilerplate code.
+This library comes too with a annotation-based validation tool. Just annotate your object fields with @NotNull, @MinLength, @Regex(pattern)... and the library will take care of the validation and the error population.
+
+### Usage
+
+This is an example of how read a big form and save it in a complex object. It is being validated with the AnnotatedValidator. And when the form is fully valid the onFormValid method will be triggered to enable the submission button. 
+
+```java
+EditText username = (EditText)findViewById(R.id.username);
+        EditText password = (EditText)findViewById(R.id.password);
+        EditText rpassword = (EditText)findViewById(R.id.rpassword);
+        EditText email = (EditText)findViewById(R.id.email);
+
+        CheckBox terms = (CheckBox)findViewById(R.id.terms);
+        CheckBox subscribe = (CheckBox)findViewById(R.id.newsletter);
+
+        CheckBox sport = (CheckBox)findViewById(R.id.sport);
+        CheckBox cars = (CheckBox)findViewById(R.id.cars);
+        CheckBox science = (CheckBox)findViewById(R.id.science);
+
+        final Button submit = (Button)findViewById(R.id.submit);
+
+        final TypedForm<RegisterForm> form =
+                GGAForm.startWithContext(this)
+                .appendField("username", Inputs.newString(username))
+                .appendField("password", Inputs.newString(password))
+                .appendField("rPassword", Inputs.newString(rpassword))
+                .appendField("acceptedTerms", Inputs.newBoolean(terms))
+                .appendField("wantSubscribe", Inputs.newBoolean(subscribe))
+                .appendField("subscription", GGASection.start()
+                                .appendField("email", Inputs.newString(email))
+                                .appendField("interests", GGASection.start()
+                                        .appendField("likesCars", Inputs.newBoolean(cars))
+                                        .appendField("likesSport", Inputs.newBoolean(sport))
+                                        .appendField("likesScience", Inputs.newBoolean(science))
+                                        .build()
+                                )
+                                .build()
+                )
+                .buildTyped(RegisterForm.class)
+                .addValidator( AnnotatedValidator.newInstance() )
+                .setOnValidListener(new OnValidTypedFormListener<RegisterForm>() {
+                    @Override
+                    public void onFormValid(TypedForm<RegisterForm> form, RegisterForm object) {
+                        submit.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onFormInvalid(TypedForm<RegisterForm> form) {
+                        submit.setEnabled(false);
+                    }
+                });
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submit(form.getObject());
+            }
+        });
+```
+    
+### Integration
+
+Add as a dependency to your ``build.gradle``:
+
+```groovy
+dependencies {
+    compile 'com.greengrowapps:ggaformsui:0.1'
+}
+```
+    
+### Things to develop
+This version is still not 1.0, which means api changes could happen. It needs some test and development.
+
+If you want to collaborate, here is a checklist of planned features you can help working on :
++ More validation annotation and validators
++ More tests
+
+### License
+
+```
+   Apache License Version 2.0, January 2004
+
+   Copyright 2015 Green Grow Apps SC
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+```
+    
