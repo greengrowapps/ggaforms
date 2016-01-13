@@ -7,10 +7,12 @@ import com.greengrowapps.ggaforms.validation.TypedFormValidator;
 import com.greengrowapps.ggaforms.validation.annotations.MaxLength;
 import com.greengrowapps.ggaforms.validation.annotations.MinLength;
 import com.greengrowapps.ggaforms.validation.annotations.NotNull;
+import com.greengrowapps.ggaforms.validation.annotations.Regex;
 import com.greengrowapps.ggaforms.validation.annotations.True;
 import com.greengrowapps.ggaforms.validation.annotations.Twin;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProviderImpl;
+import com.greengrowapps.ggaforms.validation.validator.regex.RegexProvider;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -50,6 +52,14 @@ public class AnnotatedValidator implements TypedFormValidator {
             @Override
             public ValueValidator buildValidator(Annotation annotation, FormInput input) {
                 return new TwinValidator(input,errorProvider,((Twin)annotation).id());
+            }
+        });
+        validatorMap.put(Regex.class.getCanonicalName(), new ValidatorProvider() {
+            @Override
+            public ValueValidator buildValidator(Annotation annotation, FormInput input) {
+                String key = ((Regex)annotation).key();
+                return RegexProvider.getInstance().getValidator(key,input);
+
             }
         });
 

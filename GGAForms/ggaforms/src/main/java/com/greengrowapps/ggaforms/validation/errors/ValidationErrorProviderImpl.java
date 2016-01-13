@@ -44,6 +44,12 @@ public class ValidationErrorProviderImpl implements ValidationErrorProvider {
                 return new TwinValidationError(resources);
             }
         });
+        registerErrorForClass(RegexValidationError.class, new ErrorBuilder() {
+            @Override
+            public ValidationError build( Object... params ) {
+                return RegexValidationError.buildFrom(resources,params);
+            }
+        });
     }
 
     public static void init(Resources resources){

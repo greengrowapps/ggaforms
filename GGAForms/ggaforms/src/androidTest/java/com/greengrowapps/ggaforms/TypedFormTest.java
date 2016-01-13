@@ -6,16 +6,24 @@ import android.test.AndroidTestCase;
 import com.greengrowapps.ggaforms.annotations.NotNumbersValidationError;
 import com.greengrowapps.ggaforms.annotations.OnlyNumbers;
 import com.greengrowapps.ggaforms.annotations.OnlyNumbersValidator;
+import com.greengrowapps.ggaforms.dto.CreditCardRegexObj;
 import com.greengrowapps.ggaforms.dto.MainObj;
 import com.greengrowapps.ggaforms.dto.NestedObj;
+import com.greengrowapps.ggaforms.dto.EmailRegexObj;
+import com.greengrowapps.ggaforms.dto.PhoneRegexObj;
 import com.greengrowapps.ggaforms.dto.TwinFieldObj;
 import com.greengrowapps.ggaforms.dto.UserObj;
 import com.greengrowapps.ggaforms.fields.BooleanFormInput;
 import com.greengrowapps.ggaforms.fields.FormInput;
 import com.greengrowapps.ggaforms.fields.StringFormInput;
+import com.greengrowapps.ggaforms.validation.errors.ErrorBuilder;
+import com.greengrowapps.ggaforms.validation.errors.RegexValidationError;
+import com.greengrowapps.ggaforms.validation.errors.ValidationError;
+import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProviderImpl;
 import com.greengrowapps.ggaforms.validation.validator.AnnotatedValidator;
 import com.greengrowapps.ggaforms.validation.validator.ValidatorProvider;
 import com.greengrowapps.ggaforms.validation.validator.ValueValidator;
+import com.greengrowapps.ggaforms.validation.validator.regex.RegexProvider;
 
 import java.lang.annotation.Annotation;
 
@@ -286,4 +294,49 @@ public class TypedFormTest extends AndroidTestCase{
 
         assertTrue(form.isValid());
     }
+
+    public void testRegexValidator() {
+        StringFormInput emailField = new StringFormInput();
+
+        TypedForm<EmailRegexObj> form = GGAForm.startWithContext(getContext())
+                .appendField("email", emailField)
+                .buildTyped(EmailRegexObj.class)
+                .addValidator(AnnotatedValidator.newInstance());
+
+        emailField.setText("12345");
+
+        assertFalse(form.isValid());
+        assertEquals(getContext().getResources().getString(R.string.invalidEmail), emailField.getErrorString());
+
+        emailField.setText("user@mail.com");
+
+        assertTrue(form.isValid());
+    }
+
+    public void testReplaceRegexValidator() {
+        StringFormInput creditCard = new StringFormInput();
+
+        TypedForm<CreditCardRegexObj> form = GGAForm.startWithContext(getContext())
+                .appendField("cardNr", creditCard)
+                .buildTyped(CreditCardRegexObj.class)
+                .addValidator(AnnotatedValidator.newInstance());
+
+        creditCard.setText("4111222233334444");
+
+        assertTrue(form.isValid());
+
+        RegexProvider.getInstance().replaceRegex(RegexProvider.CREDIT_CARD, "^[abc]*$");
+
+        form = GGAForm.startWithContext(getContext())
+                .appendField("cardNr", creditCard)
+                .buildTyped(CreditCardRegexObj.class)
+                .addValidator(AnnotatedValidator.newInstance());
+
+        creditCard.setText("4111222233334444");
+
+        assertFalse(form.isValid());
+        assertEquals(getContext().getResources().getString(R.string.invalidCreditCard), creditCard.getErrorString());
+
+    }
+
 }

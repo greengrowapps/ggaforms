@@ -5,4 +5,6 @@
     <string name="exceedsMaxLenght">Use maximum %1$s characters</string>
     <string name="exceedsMinLength">Must be at least %1$s characters</string>
     <string name="fieldsAreNotEqual">Fields are not equal</string>
+    <string name="invalidEmail">Use a valid email</string>
+    <string name="invalidCreditCard">Use a valid credit card</string>
 </resources>
