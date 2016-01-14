@@ -63,6 +63,77 @@ EditText username = (EditText)findViewById(R.id.username);
             }
         });
 ```
+You can use the library just to populate objects in the UI avoiding boilerplate:
+
+```java
+        TextView outUsername = (TextView)findViewById(R.id.tUsername);
+        TextView outEmail = (TextView)findViewById(R.id.tEmail);
+
+        TypedForm<User> outForm = GGAForm.startWithContext(this)
+                .appendField("username", Inputs.newString(outUsername))
+                .appendField("email", Inputs.newString(outEmail))
+                .buildTyped(User.class);
+                
+        outForm.setObject(myUser);
+```
+You can use the predefined annotations to validate or implement your custom:
+
+```java
+public class SimpleLoginForm {
+
+    @Regex( key = RegexProvider.EMAIL)
+    @NotNull
+    private String email;
+
+    @NotNull
+    @MinLength(length = 6)
+    private String password;
+    
+    @True
+    private boolean acceptedTermsAndConditions;
+    
+    @ProductReference
+    private String associatedProduct;
+```
+
+```java
+TypedForm<LoginForm> registerForm = GGAForm.startWithContext(this)
+        .appendField("email", Inputs.newString(emailEditText))
+        .appendField("password", Inputs.newString(passwordEditText))
+        .appendField("acceptedTermsAndConditions", Inputs.newBoolean(termsCheckBox))
+        .appendField("associatedProduct",Inputs.newString(producRefEditText))
+        .buildTyped(LoginForm.class)
+        .addValidator( 
+                AnnotatedValidator.newInstance()
+                .registerAnnotation(ProductReference.class,new ProductReferenceValidatorProvider())
+        );
+```
+Like the most comon validation is a Regex validation, you have avaliable the @Regex(key) annotation. With the key you specify wich kind of validator want to use for this field. You have already defined keys in the RegexProvider class, but you can replace this regex or add new custom keys:
+
+Using a defined key:
+```java
+@Regex( key = RegexProvider.EMAIL )
+String email;
+```
+Implementing a custom key and using it:
+```java
+@Regex( key = GITHUB_EMAIL )
+String email;
+```
+```java
+        RegexProvider.getInstance()
+        .registerRegex(RegisterForm.GITHUB_EMAIL, "^[a_Z0-9]*@github.com$", new ErrorBuilder(){
+            @Override
+            public ValidationError build(Object... params) {
+                return new ValidationErrorImpl(getString(R.string.validGithubEmail));
+            }
+        });
+```
+Or just replace a existing:
+```java
+        RegexProvider.getInstance()
+                .replaceRegex(RegexProvider.EMAIL, "^[a_Z0-9]*@github.com$");
+```
     
 ### Integration
 
