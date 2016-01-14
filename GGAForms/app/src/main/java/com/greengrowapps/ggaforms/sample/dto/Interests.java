@@ -1,4 +1,4 @@
-package com.greengrowapps.ggaforms.sample;
+package com.greengrowapps.ggaforms.sample.dto;
 
 
 public class Interests {

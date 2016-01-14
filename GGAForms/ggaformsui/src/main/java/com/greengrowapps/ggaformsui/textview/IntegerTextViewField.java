@@ -1,12 +1,15 @@
-package com.greengrowapps.ggaformsui.edittext;
+package com.greengrowapps.ggaformsui.textview;
 
 
 import android.widget.EditText;
+import android.widget.TextView;
 
-public class IntegerEditTextField extends AbstractEditTextField<Integer>{
+import com.greengrowapps.ggaformsui.edittext.AbstractEditTextField;
 
-    public IntegerEditTextField( EditText editText) {
-        super(Integer.class, editText);
+public class IntegerTextViewField extends AbstractTextViewField<Integer>{
+
+    public IntegerTextViewField(TextView textView) {
+        super(Integer.class, textView);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.greengrowapps.ggaformsui.common.DisplayErrorListener;
 public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implements TextWatcher {
 
     private boolean firstEdit = true;
+    private EditText editText;
 
     public AbstractEditTextField(Class<T> clazz, EditText editText) {
         super(clazz);
@@ -24,6 +25,7 @@ public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implem
                 }
             }
         });
+        this.editText = editText;
     }
 
     protected void onFocusLost(){
@@ -32,6 +34,7 @@ public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implem
     }
 
     protected abstract T textToObj(String text);
+    protected abstract CharSequence objToText(T value);
 
     @Override
     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -53,7 +56,6 @@ public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implem
     }
 
 
-
     @Override
     protected void displayError() {
         if(!isFirstEdit()){
@@ -61,7 +63,15 @@ public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implem
         }
     }
 
+    @Override
+    public void setValue(T value) {
+        super.setValue(value);
+        if(!isEqual(value, textToObj(editText.getText().toString()))) {
+            int cursorEnd = editText.getSelectionEnd();
+            int cursorStart = editText.getSelectionStart();
+            editText.setText(objToText(value));
+            editText.setSelection(cursorStart, cursorEnd);
+        }
 
-
-
+    }
 }

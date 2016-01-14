@@ -12,8 +12,9 @@ public class AbstractUiField<T> extends BaseFormInput<T> {
         super(clazz);
     }
 
-    public void setDisplayErrorListener(DisplayErrorListener displayErrorListener) {
+    public AbstractUiField setDisplayErrorListener(DisplayErrorListener displayErrorListener) {
         this.displayErrorListener = displayErrorListener;
+        return this;
     }
 
     @Override

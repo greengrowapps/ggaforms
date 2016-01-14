@@ -13,4 +13,9 @@ public class StringEditTextField extends AbstractEditTextField<String> {
         return text;
     }
 
+    @Override
+    protected CharSequence objToText(String value) {
+        return value;
+    }
+
 }

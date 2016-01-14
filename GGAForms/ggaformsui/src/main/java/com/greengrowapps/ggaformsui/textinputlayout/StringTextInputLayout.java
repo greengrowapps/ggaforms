@@ -13,4 +13,9 @@ public class StringTextInputLayout extends AsbstractInputLayoutField<String> {
     protected String textToObj(String text) {
         return text;
     }
+
+    @Override
+    protected CharSequence objToText(String text) {
+        return text;
+    }
 }

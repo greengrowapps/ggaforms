@@ -19,4 +19,9 @@ public class IntegerTextInputLayout extends AsbstractInputLayoutField<Integer> {
             return null;
         }
     }
+
+    @Override
+    protected CharSequence objToText(Integer obj) {
+        return obj+"";
+    }
 }

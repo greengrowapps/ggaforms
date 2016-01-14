@@ -28,6 +28,21 @@ public abstract class BaseFormInput<T> implements FormInput<T> {
 
     @Override
     public void setValue(T value){
+        if(!isEqual(this.value,value)){
+            updateValue(value);
+        }
+    }
+
+    protected boolean isEqual(T value1, T value2){
+        if(value1==null){
+            return value2==null;
+        }
+        else{
+            return value1.equals(value2);
+        }
+    }
+
+    private void updateValue(T value){
         this.value = value;
         onFieldChanged(value);
     }

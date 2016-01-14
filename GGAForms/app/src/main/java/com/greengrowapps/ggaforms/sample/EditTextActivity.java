@@ -7,17 +7,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.greengrowapps.ggaforms.GGAForm;
 import com.greengrowapps.ggaforms.GGASection;
 import com.greengrowapps.ggaforms.TypedForm;
 import com.greengrowapps.ggaforms.listeners.OnValidTypedFormListener;
+import com.greengrowapps.ggaforms.sample.dto.RegisterForm;
 import com.greengrowapps.ggaforms.validation.validator.AnnotatedValidator;
 import com.greengrowapps.ggaformsui.Inputs;
+import com.greengrowapps.ggaformsui.Outputs;
 
-public class MainActivity extends AppCompatActivity {
 
-    private static final String DEBUG_TAG = "MainActivity";
+public class EditTextActivity extends AppCompatActivity {
+
+    private static final String DEBUG_TAG = "EditTextActivity";
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         EditText rpassword = (EditText)findViewById(R.id.rpassword);
         EditText email = (EditText)findViewById(R.id.email);
 
+        TextView usernameError = (TextView)findViewById(R.id.usernameError);
+
         CheckBox terms = (CheckBox)findViewById(R.id.terms);
         CheckBox subscribe = (CheckBox)findViewById(R.id.newsletter);
 
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         final TypedForm<RegisterForm> form =
                 GGAForm.startWithContext(this)
-                .appendField("username", Inputs.newString(username))
+                .appendField("username", Inputs.newString(username).setDisplayErrorListener(Outputs.newError(usernameError)) )
                 .appendField("password", Inputs.newString(password))
                 .appendField("rPassword", Inputs.newString(rpassword))
                 .appendField("acceptedTerms", Inputs.newBoolean(terms))
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                                 .build()
                 )
                 .buildTyped(RegisterForm.class)
-                .addValidator( AnnotatedValidator.newInstance() )
+                .addValidator(AnnotatedValidator.newInstance())
                 .setOnValidListener(new OnValidTypedFormListener<RegisterForm>() {
                     @Override
                     public void onFormValid(TypedForm<RegisterForm> form, RegisterForm object) {

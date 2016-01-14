@@ -19,4 +19,9 @@ public class DoubleTextInputLayout extends AsbstractInputLayoutField<Double> {
             return null;
         }
     }
+
+    @Override
+    protected CharSequence objToText(Double value) {
+        return value+"";
+    }
 }

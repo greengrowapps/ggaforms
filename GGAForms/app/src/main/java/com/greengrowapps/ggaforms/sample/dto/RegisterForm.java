@@ -1,7 +1,10 @@
-package com.greengrowapps.ggaforms.sample;
+package com.greengrowapps.ggaforms.sample.dto;
+
+import com.greengrowapps.ggaforms.validation.annotations.MinLength;
 
 public class RegisterForm {
 
+    @MinLength(length = 5)
     private String username;
     private String password;
     private String rPassword;
