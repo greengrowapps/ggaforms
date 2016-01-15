@@ -1,10 +1,7 @@
 package com.greengrowapps.ggaformsui.textview;
 
 
-import android.widget.EditText;
 import android.widget.TextView;
-
-import com.greengrowapps.ggaformsui.edittext.AbstractEditTextField;
 
 public class DoubleTextViewField extends AbstractTextViewField<Double> {
 

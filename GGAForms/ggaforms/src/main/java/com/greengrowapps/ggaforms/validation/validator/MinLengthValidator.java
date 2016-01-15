@@ -1,14 +1,10 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
 import com.greengrowapps.ggaforms.fields.FormInput;
-import com.greengrowapps.ggaforms.validation.annotations.MaxLength;
-import com.greengrowapps.ggaforms.validation.annotations.MinLength;
 import com.greengrowapps.ggaforms.validation.errors.ExceedsMaxLengthValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ExceedsMinLengthValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
-
-import java.lang.annotation.Annotation;
 
 
 public class MinLengthValidator extends ErrorProvidedValidator<ExceedsMinLengthValidationError> {

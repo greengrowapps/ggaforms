@@ -1,7 +1,6 @@
 package com.greengrowapps.ggaforms.introspection;
 
 import com.greengrowapps.ggaforms.fields.FormInput;
-import com.greengrowapps.ggaforms.validation.InputBundle;
 
 import java.lang.reflect.Field;
 

@@ -5,9 +5,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-import com.greengrowapps.ggaforms.fields.BaseFormInput;
 import com.greengrowapps.ggaformsui.common.AbstractUiField;
-import com.greengrowapps.ggaformsui.common.DisplayErrorListener;
 
 public abstract class AbstractEditTextField<T> extends AbstractUiField<T> implements TextWatcher {
 

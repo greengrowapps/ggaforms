@@ -3,7 +3,6 @@ package com.greengrowapps.ggaforms.introspection;
 
 import java.lang.reflect.Field;
 import java.security.InvalidParameterException;
-import java.util.Locale;
 
 public class SimpleAssignator<S,T> implements Asignator<S,T> {
 

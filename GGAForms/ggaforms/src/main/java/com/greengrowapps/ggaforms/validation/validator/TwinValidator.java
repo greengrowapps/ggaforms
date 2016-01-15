@@ -1,12 +1,9 @@
 package com.greengrowapps.ggaforms.validation.validator;
 
 import com.greengrowapps.ggaforms.fields.FormInput;
-import com.greengrowapps.ggaforms.validation.annotations.Twin;
-import com.greengrowapps.ggaforms.validation.errors.NullFieldValidationError;
 import com.greengrowapps.ggaforms.validation.errors.TwinValidationError;
 import com.greengrowapps.ggaforms.validation.errors.ValidationErrorProvider;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
