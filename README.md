@@ -141,7 +141,7 @@ Add as a dependency to your ``build.gradle``:
 
 ```groovy
 dependencies {
-    compile 'com.greengrowapps:ggaformsui:0.1'
+    compile 'com.greengrowapps:ggaformsui:0.3'
 }
 ```
     
