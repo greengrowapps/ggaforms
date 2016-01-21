@@ -172,3 +172,7 @@ If you want to collaborate, here is a checklist of planned features you can help
 
 ```
     
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/greengrowapps/ggaforms/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
