@@ -1,5 +1,6 @@
 ### GgaForms
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.greengrowapps/ggaforms/badge.svg?style=flat)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-ggaforms-green.svg?style=true)](https://android-arsenal.com/details/1/3068)
 
 ### Introduction
 This library makes it easy to work with forms in Android. How many times have you take the text from edittexts or have populated an object to the UI. And how many times have you validated this object and populated the error. With this library you have a comfortable builder interface that allows to easily define and connect your object with the UI. You will be able to retrieve and populate your data saving hundrets of boilerplate code.
