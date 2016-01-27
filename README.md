@@ -2,7 +2,7 @@
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.greengrowapps/ggaforms/badge.svg?style=flat)
 
 ### Introduction
-This library makes it easy to work with forms in Android. How many times have you take the text from edittexts or have populated an object to the UI. And how many times have you validated this object and populated the error. With this library you have a confortable builder interface that allows to easily define and conect your object with the UI. You will be able to retrieve and populate your data saving hundrets of boilerplate code.
+This library makes it easy to work with forms in Android. How many times have you take the text from edittexts or have populated an object to the UI. And how many times have you validated this object and populated the error. With this library you have a comfortable builder interface that allows to easily define and connect your object with the UI. You will be able to retrieve and populate your data saving hundrets of boilerplate code.
 This library comes too with a annotation-based validation tool. Just annotate your object fields with @NotNull, @MinLength, @Regex(pattern)... and the library will take care of the validation and the error population.
 
 ### Usage
